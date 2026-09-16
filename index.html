@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LearnLedger: free study tracker &amp; revision planner</title>
+<meta name="description" content="Free Chrome extension for CBSE, JEE and NEET students: tracks what you study on YouTube and learning sites, checks what you remember, and plans your revision.">
+<meta property="og:title" content="LearnLedger: Padha kitna? Yaad kitna?">
+<meta property="og:description" content="Track what you study. Know what you remember. Revise what you forget. Free, no login, data stays on your laptop.">
+<meta property="og:image" content="assets/og-image.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.png">
+</head>
+<body>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root {
+  --paper: #f6f8fc; --sheet: #ffffff; --ink: #0f2447; --ink-2: #44557a; --muted: #6b7a99;
+  --rule: #dfe6f1; --brand: #1c5cab; --brand-deep: #0f3d7a; --brand-wash: #e8f0fb;
+  --margin: #d6453d; --good: #16874a; --good-wash: #e3f4ea; --bad: #c2372f; --bad-wash: #fbe8e6;
+  --hi: #ffe46b; --hi-ink: #0f2447; --on-brand: #ffffff; --shadow: 0 1px 2px rgba(15,36,71,.06), 0 12px 32px rgba(15,36,71,.08);
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0b1424; --sheet: #111d33; --ink: #eef3fb; --ink-2: #b4c1d9; --muted: #8796b3;
+    --rule: #22314d; --brand: #5b9bea; --brand-deep: #8dbcf5; --brand-wash: #15294a;
+    --margin: #e66a62; --good: #4cc27d; --good-wash: #12301f; --bad: #f08a83; --bad-wash: #3a1a1a;
+    --hi: #ffe46b; --hi-ink: #0f2447; --on-brand: #0b1424; --shadow: 0 0 0 1px rgba(255,255,255,.06);
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0b1424; --sheet: #111d33; --ink: #eef3fb; --ink-2: #b4c1d9; --muted: #8796b3;
+  --rule: #22314d; --brand: #5b9bea; --brand-deep: #8dbcf5; --brand-wash: #15294a;
+  --margin: #e66a62; --good: #4cc27d; --good-wash: #12301f; --bad: #f08a83; --bad-wash: #3a1a1a;
+  --hi: #ffe46b; --hi-ink: #0f2447; --on-brand: #0b1424; --shadow: 0 0 0 1px rgba(255,255,255,.06);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-inline: 24px; }
+@media (max-width: 520px) { .wrap { padding-inline: 16px; } body { font-size: 16px; } }
+a { color: var(--brand); }
+h1, h2, h3 { font-family: var(--display); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.02em; }
+h2 { font-size: clamp(32px, 4.4vw, 50px); font-weight: 800; }
+h3 { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+p { margin: 0; }
+.lede { color: var(--ink-2); font-size: 19px; max-width: 58ch; }
+.mark { background: linear-gradient(transparent 58%, var(--hi) 58%, var(--hi) 92%, transparent 92%); color: inherit; padding-inline: 2px; }
+:root[data-theme="dark"] .mark { color: var(--ink); }
+.eyebrow { font: 500 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--margin); }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 12px; font: 700 17px/1 var(--body); text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+.btn:focus-visible, button:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid var(--hi); outline-offset: 2px; }
+.btn-primary { background: var(--brand); color: var(--on-brand); box-shadow: 0 6px 18px rgba(28,92,171,.28); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(28,92,171,.34); }
+.btn-ghost { border-color: var(--rule); color: var(--ink); background: var(--sheet); }
+.btn-ghost:hover { border-color: var(--brand); }
+.btn svg { width: 20px; height: 20px; flex: none; }
+
+/* nav */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.logo { display: flex; align-items: center; gap: 10px; font: 800 21px/1 var(--display); color: var(--ink); text-decoration: none; letter-spacing: -.02em; }
+.logo img { width: 32px; height: 32px; border-radius: 8px; }
+.nav-links { display: flex; align-items: center; gap: 22px; font-weight: 600; font-size: 15px; }
+.nav-links a { color: var(--ink-2); text-decoration: none; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links .btn { padding: 10px 16px; font-size: 15px; color: var(--on-brand); white-space: nowrap; }
+@media (max-width: 760px) { .nav-links a:not(.btn) { display: none; } }
+
+/* hero: a ruled exam-notebook page with a red margin */
+.hero { padding-block: 56px 72px; }
+.hero-grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: 56px; align-items: center; }
+@media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+@media (max-width: 520px) { .hero { padding-block: 32px 48px; } .hero .hero-copy { padding-left: 16px; } }
+.hero-copy { position: relative; padding-left: 28px; border-left: 2px solid var(--margin); display: grid; gap: 22px; }
+.hero h1 { font-size: clamp(40px, 6.4vw, 84px); font-weight: 800; letter-spacing: -.045em; line-height: .95; }
+.hero h1 span { display: block; white-space: nowrap; }
+.hero h1 .q2 { color: var(--brand); }
+.hero .cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.trust { display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--muted); font-size: 14px; font-weight: 600; }
+.trust span { display: inline-flex; gap: 6px; align-items: center; }
+.trust svg { width: 16px; height: 16px; color: var(--good); }
+
+/* recall card (live demo) */
+.sheet { background: var(--sheet); border-radius: 18px; box-shadow: var(--shadow); border: 1px solid var(--rule); }
+.demo { padding: 22px; position: relative; border-top: 6px solid var(--brand); }
+.demo-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 14px; background: var(--sheet); }
+.demo-head .t { font: 700 20px/1.2 var(--display); }
+.demo-head .sub { font-size: 13px; color: var(--muted); }
+.timer { font: 500 13px/1 var(--mono); color: var(--ink-2); white-space: nowrap; }
+.steps { display: flex; gap: 5px; margin-bottom: 14px; }
+.steps i { height: 5px; flex: 1; border-radius: 3px; background: var(--rule); }
+.steps i.on { background: var(--brand); }
+.qkind { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.qtext { font: 700 22px/1.25 var(--display); margin: 8px 0 14px; background: var(--sheet); display: inline-block; }
+.opts { display: grid; gap: 8px; }
+.opt { text-align: left; font: 600 16px/1.3 var(--body); padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--rule); background: var(--sheet); color: var(--ink); cursor: pointer; }
+.opt:hover:not(:disabled) { border-color: var(--brand); }
+.opt:disabled { cursor: default; }
+.opt.right { border-color: var(--good); background: var(--good-wash); color: var(--good); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-wash); color: var(--bad); }
+.fb { min-height: 26px; margin-top: 10px; font-size: 14px; font-weight: 600; color: var(--ink-2); background: var(--sheet); display: inline-block; }
+.result { display: grid; gap: 12px; }
+.score { font: 800 72px/1 var(--display); letter-spacing: -.04em; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 700 13px/1 var(--body); padding: 6px 10px; border-radius: 99px; }
+.chip i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.chip.good { background: var(--good-wash); color: var(--good); }
+.chip.bad { background: var(--bad-wash); color: var(--bad); }
+.chip.mid { background: #fff3cf; color: #8a5a00; }
+.demo-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 16px; font-size: 13px; color: var(--muted); background: var(--sheet); }
+.linkbtn { background: none; border: 0; color: var(--brand); font: 700 14px var(--body); cursor: pointer; padding: 4px 0; }
+
+/* sections */
+section.block { padding-block: 88px; border-top: 1px solid var(--rule); }
+.sec-head { display: grid; gap: 14px; margin-bottom: 44px; max-width: 760px; }
+.problem { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .problem { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .problem { grid-template-columns: 1fr; } }
+.src { padding: 22px; display: grid; gap: 6px; align-content: start; }
+.src .n { font: 500 13px var(--mono); color: var(--muted); }
+.src b { font: 700 20px/1.2 var(--display); }
+.src p { color: var(--ink-2); font-size: 15px; }
+.src s { color: var(--bad); text-decoration-thickness: 2px; }
+
+.how { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; counter-reset: step; }
+@media (max-width: 860px) { .how { grid-template-columns: 1fr; } }
+.step { display: grid; gap: 14px; align-content: start; }
+.step .num { font: 800 15px/1 var(--mono); color: var(--on-brand); background: var(--brand); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; }
+.step p { color: var(--ink-2); }
+.shot { border-radius: 14px; overflow: hidden; border: 1px solid var(--rule); box-shadow: var(--shadow); background: var(--sheet); }
+.shot img { display: block; width: 100%; height: auto; }
+
+.features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+@media (max-width: 860px) { .features { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .features { grid-template-columns: 1fr; } }
+.feat { padding: 26px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); display: grid; gap: 8px; align-content: start; background: var(--sheet); }
+.feat p { color: var(--ink-2); font-size: 15px; }
+.feat .k { font: 500 12px var(--mono); color: var(--margin); letter-spacing: .06em; text-transform: uppercase; }
+
+.gallery { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; align-items: start; }
+@media (max-width: 860px) { .gallery { grid-template-columns: 1fr; } }
+.gallery .stack { display: grid; gap: 20px; }
+figure { margin: 0; display: grid; gap: 10px; }
+figcaption { font-size: 14px; color: var(--muted); font-weight: 600; }
+
+.share { display: grid; grid-template-columns: .8fr 1.2fr; gap: 56px; align-items: center; }
+@media (max-width: 860px) { .share { grid-template-columns: 1fr; } }
+.share img { width: 100%; max-width: 380px; border-radius: 22px; box-shadow: var(--shadow); display: block; margin-inline: auto; transform: rotate(-2deg); }
+
+.privacy { background: var(--brand-deep); color: #fff; border-radius: 24px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+:root[data-theme="dark"] .privacy { background: var(--brand-wash); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .privacy { background: var(--brand-wash); } }
+@media (max-width: 860px) { .privacy { grid-template-columns: 1fr; } }
+.privacy h2 { color: #fff; }
+.privacy p { color: #cfe0f7; }
+.privacy ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.privacy li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; font-weight: 600; color: #fff; }
+.privacy li svg { width: 24px; height: 24px; color: #9ee79e; }
+.privacy a { color: #fff; }
+
+.sites { display: flex; flex-wrap: wrap; gap: 8px; }
+.sites span { font: 600 14px var(--body); padding: 8px 14px; border-radius: 99px; background: var(--sheet); border: 1px solid var(--rule); color: var(--ink-2); }
+
+.faq { display: grid; gap: 10px; max-width: 820px; }
+details { background: var(--sheet); border: 1px solid var(--rule); border-radius: 14px; padding: 4px 20px; }
+summary { cursor: pointer; font: 700 18px/1.3 var(--display); padding: 16px 0; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font: 500 24px/1 var(--mono); color: var(--brand); }
+details[open] summary::after { content: "−"; }
+details p { padding-bottom: 18px; color: var(--ink-2); }
+
+.final { text-align: center; display: grid; justify-items: center; gap: 22px; padding-block: 96px; }
+.final h2 { font-size: clamp(40px, 6vw, 72px); }
+footer { border-top: 1px solid var(--rule); padding-block: 28px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+footer a { color: var(--ink-2); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top"><img src="assets/icon.png" alt="" width="32" height="32">LearnLedger</a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary js-install" href="#">Add to Chrome</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Free study tracker for CBSE · JEE · NEET</span>
+        <h1><span>Padha kitna?</span><span class="q2">Yaad kitna?</span></h1>
+        <p class="lede">You study for hours on YouTube, coaching apps and NCERT PDFs. LearnLedger keeps a record of <span class="mark">what you studied</span>, checks <span class="mark">what you still remember</span>, and tells you what to revise next.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary js-install" href="#">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+            Add to Chrome, it's free
+          </a>
+          <a class="btn btn-ghost" href="#how">See how it works</a>
+        </div>
+        <div class="trust">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>No login</span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Data stays on your laptop</span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Works on Chrome, Edge &amp; Brave</span>
+        </div>
+      </div>
+
+      <div class="sheet demo" aria-live="polite">
+        <div class="demo-head">
+          <div><div class="sub">Try a recall check · Class 10 Maths</div><div class="t">Trigonometry</div></div>
+          <span class="timer" id="demo-timer">0s / 90s</span>
+        </div>
+        <div id="demo-body"></div>
+        <div class="demo-foot"><span>This is what LearnLedger asks an hour after you watch a lesson.</span><button class="linkbtn" id="demo-reset" type="button">Restart</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">The problem</span>
+        <h2>Your study is spread over five apps, and none of them remembers it for you.</h2>
+      </div>
+      <div class="problem">
+        <div class="sheet src"><span class="n">YouTube</span><b>One-shot lectures</b><p>Four hours watched. Which chapters? <s>No idea.</s></p></div>
+        <div class="sheet src"><span class="n">Coaching</span><b>Offline classes</b><p>Notes across notebooks, <s>no single list</s> of what's covered.</p></div>
+        <div class="sheet src"><span class="n">PDFs &amp; NCERT</span><b>Reading</b><p>You read it. <s>Would you remember it</s> in the exam?</p></div>
+        <div class="sheet src"><span class="n">Revision</span><b>Exam week</b><p>You end up guessing what to revise, <s>again</s>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">How it works</span>
+        <h2>Study as usual. LearnLedger takes it from there.</h2>
+      </div>
+      <div class="how">
+        <div class="step">
+          <span class="num">1</span>
+          <h3>Watch or read</h3>
+          <p>Study on YouTube, PW, Khan Academy, BYJU'S, NCERT or 30+ other sites. Only active time counts: a paused video or an idle tab doesn't.</p>
+          <div class="shot"><img src="assets/shot-1-dashboard.jpg" alt="LearnLedger dashboard showing study time, streak and revision list" width="1280" height="800"></div>
+        </div>
+        <div class="step">
+          <span class="num">2</span>
+          <h3>Confirm the chapter</h3>
+          <p>It reads the lesson title and suggests the subject, chapter and subtopics, for example Maths → Trigonometry → Ratios. One click to confirm.</p>
+          <div class="shot"><img src="assets/shot-2-confirm-topics.jpg" alt="Topic confirmation screen with suggested subject and chapter" width="1280" height="800"></div>
+        </div>
+        <div class="step">
+          <span class="num">3</span>
+          <h3>Recall, then revise</h3>
+          <p>An hour later, and again a day later, take a quick check of 3–4 questions. Weak chapters move to the top of your revision list.</p>
+          <div class="shot"><img src="assets/shot-3-recall-check.jpg" alt="A 90-second recall check question" width="1280" height="800"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">What you get</span>
+        <h2>A record of your learning, and a plan for what to revise next.</h2>
+      </div>
+      <div class="features">
+        <div class="feat"><span class="k">Ledger</span><h3>Every session, logged</h3><p>Date, source, chapter, subtopics, time spent and your recall score, in one searchable list you can export to CSV.</p></div>
+        <div class="feat"><span class="k">Retention</span><h3>Strong · Moderate · Weak</h3><p>Each chapter gets a score from 0 to 100 based on your recall answers and how confident you felt.</p></div>
+        <div class="feat"><span class="k">Revision</span><h3>Spaced revision</h3><p>Strong chapters come back in 1, 3, 7, 14, then 30 days. Weak ones come back straight away.</p></div>
+        <div class="feat"><span class="k">Connections</span><h3>Find missing basics</h3><p>Struggling with word problems? It shows whether Linear Equations and Graphs need work first.</p></div>
+        <div class="feat"><span class="k">Offline</span><h3>Coaching &amp; books</h3><p>Log offline classes, PDFs and practice sessions, so your ledger covers all your study.</p></div>
+        <div class="feat"><span class="k">Flashcards</span><h3>Your own questions</h3><p>Write "Q: … A: …" in your notes and those lines become recall questions.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Inside the extension</span>
+        <h2>Know what to revise today.</h2>
+      </div>
+      <div class="gallery">
+        <figure><div class="shot"><img src="assets/shot-4-revision-queue.jpg" alt="Revision queue with weak topics first" width="1280" height="800"></div><figcaption>Revision queue: weak chapters first, then what's due, then mastered.</figcaption></figure>
+        <div class="stack">
+          <figure><div class="shot"><img src="assets/shot-5-topic-connections.jpg" alt="Topic connections showing prerequisite chapters" width="1280" height="800"></div><figcaption>Connections flag the prerequisites you're missing.</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap share">
+      <img src="assets/share-card.jpg" alt="Weekly progress card showing 4 hours 17 minutes studied, 4-day streak and average recall score 95" width="540" height="675">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Study streaks</span>
+        <h2>Post your week, not your screen time.</h2>
+        <p class="lede">Make a weekly card for your WhatsApp status or Instagram story in one tap. It shows totals only: no names, no sites, no video titles. It's a good way to keep a study group going.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="privacy">
+    <div class="wrap">
+      <div class="privacy">
+        <div style="display:grid;gap:16px;align-content:start">
+          <span class="eyebrow" style="color:#ffb3ad">Privacy first</span>
+          <h2>Your study data stays on your laptop.</h2>
+          <p>LearnLedger has no servers and no accounts. It reads a page's title, never its content, and saves everything in your browser. Parents can check the <a href="privacy.html">privacy policy</a>.</p>
+        </div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>No sign-up, email or phone number</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>No ads, analytics or tracking scripts</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Social, mail and streaming sites are never tracked</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Pause anytime, export or delete everything in one click</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Works with</span>
+        <h2>The sites you already study on.</h2>
+      </div>
+      <div class="sites">
+        <span>YouTube</span><span>Physics Wallah</span><span>Khan Academy</span><span>BYJU'S</span><span>Vedantu</span><span>Unacademy</span><span>Doubtnut</span><span>Embibe</span><span>Toppr</span><span>NCERT</span><span>DIKSHA</span><span>NPTEL</span><span>SWAYAM</span><span>ALLEN</span><span>Aakash</span><span>LearnCBSE</span><span>Shaalaa</span><span>Selfstudys</span><span>GeeksforGeeks</span><span>W3Schools</span><span>Coursera</span><span>Wikipedia</span><span>+ any site you choose</span>
+      </div>
+      <p style="margin-top:14px;color:var(--muted);font-size:14px">Brand names belong to their owners. LearnLedger is an independent tool and isn't affiliated with these sites.</p>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Questions</span><h2>FAQ</h2></div>
+      <div class="faq">
+        <details><summary>Is it really free?</summary><p>Yes. There's no paid plan, no trial and no ads. LearnLedger runs entirely on your computer, so it costs nothing to run.</p></details>
+        <details><summary>Does it work on my phone?</summary><p>Not yet. It's a browser extension for Chrome, Edge and Brave on laptops and desktops. Phone study can be added as a manual entry.</p></details>
+        <details><summary>Will it track my Instagram or games?</summary><p>No. It only reads study sites and videos that look like lessons. Social media, mail and streaming sites are ignored. You can also pause tracking or ignore any site.</p></details>
+        <details><summary>Where do the quiz questions come from?</summary><p>LearnLedger has built-in questions for common CBSE, JEE and NEET chapters. For any other topic it asks you to recall the key idea, and it uses the Q/A flashcards you write.</p></details>
+        <details><summary>What happens to my data if I uninstall?</summary><p>Chrome deletes it. Export a backup from Settings first if you want to keep your ledger.</p></details>
+        <details><summary>I'm a teacher or coaching centre. Can I use it with my students?</summary><p>Yes. Students can share their weekly card or export their ledger. Class dashboards are on the roadmap; get in touch if you'd like to pilot them.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap final">
+      <span class="eyebrow">Start tonight</span>
+      <h2>Stop guessing what<br>to revise.</h2>
+      <a class="btn btn-primary js-install" href="#">Add LearnLedger to Chrome</a>
+      <p style="color:var(--muted);font-size:14px">Free · No login · Takes 10 seconds</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 LearnLedger · Track what you learn. Know what you remember.</span>
+    <span><a href="privacy.html">Privacy policy</a> · <a class="js-install" href="#">Chrome Web Store</a></span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // Set this once the listing is live, e.g. https://chromewebstore.google.com/detail/learnledger/<id>
+  const STORE_URL = '';
+  const href = STORE_URL || 'https://chromewebstore.google.com/search/LearnLedger';
+  document.querySelectorAll('.js-install').forEach((a) => { a.href = href; a.target = '_blank'; a.rel = 'noopener'; });
+
+  const Q = [
+    { kind: 'Definition', q: 'In a right triangle, sin θ is…', o: ['Opposite / Hypotenuse', 'Adjacent / Hypotenuse', 'Opposite / Adjacent'], a: 0 },
+    { kind: 'Definition', q: 'Which ratio defines tan θ?', o: ['Adjacent / Opposite', 'Opposite / Adjacent', 'Opposite / Hypotenuse'], a: 1 },
+    { kind: 'Mini application', q: 'The value of sin 30° is…', o: ['√3/2', '1', '1/2'], a: 2 },
+  ];
+  const body = document.getElementById('demo-body');
+  const timerEl = document.getElementById('demo-timer');
+  let i, right, conf, start, tick;
+
+  const steps = () => `<div class="steps" aria-hidden="true">${[0, 1, 2, 3].map((k) => `<i class="${k < i ? 'on' : ''}"></i>`).join('')}</div>`;
+  function renderQ() {
+    const q = Q[i];
+    body.innerHTML = `${steps()}<div class="qkind">${q.kind} · ${i + 1} of 3</div><div class="qtext">${q.q}</div>
+      <div class="opts">${q.o.map((t, k) => `<button class="opt" type="button" data-k="${k}">${t}</button>`).join('')}</div><div class="fb" id="fb"></div>`;
+    body.querySelectorAll('.opt').forEach((b) => b.addEventListener('click', () => {
+      const k = +b.dataset.k, ok = k === q.a;
+      if (ok) right++;
+      body.querySelectorAll('.opt').forEach((x) => { x.disabled = true; if (+x.dataset.k === q.a) x.classList.add('right'); });
+      if (!ok) b.classList.add('wrong');
+      body.querySelector('#fb').textContent = ok ? '✓ Correct' : `✗ The answer is ${q.o[q.a]}`;
+      setTimeout(() => { i++; i < Q.length ? renderQ() : renderConf(); }, 900);
+    }));
+  }
+  function renderConf() {
+    body.innerHTML = `${steps()}<div class="qkind">Confidence</div><div class="qtext">How well do you know this chapter?</div>
+      <div class="opts">${[['strong', 'Strong'], ['okay', 'Okay'], ['weak', 'Weak']].map(([v, t]) => `<button class="opt" type="button" data-c="${v}">${t}</button>`).join('')}</div>`;
+    body.querySelectorAll('.opt').forEach((b) => b.addEventListener('click', () => { conf = b.dataset.c; renderResult(); }));
+  }
+  function renderResult() {
+    clearInterval(tick);
+    const acc = right / Q.length, c = { strong: 1, okay: .6, weak: .2 }[conf];
+    const score = Math.round(100 * (.75 * acc + .25 * c));
+    const band = score >= 75 ? ['good', 'Strong', 'Next check in 1 day, then 3, 7, 14…'] : score >= 50 ? ['mid', 'Moderate', 'A short review, then another check soon.'] : ['bad', 'Weak', 'Moved to the top of your revision list.'];
+    const secs = Math.round((Date.now() - start) / 1000);
+    body.innerHTML = `<div class="result"><div style="display:flex;align-items:center;gap:16px"><span class="score">${score}</span><div><span class="chip ${band[0]}"><i></i>${band[1]} retention</span><div style="font-size:13px;color:var(--muted);margin-top:6px">${right}/3 correct · ${secs}s</div></div></div>
+      <p style="color:var(--ink-2);background:var(--sheet)">${band[2]}${conf === 'strong' && acc < .5 ? ' You felt confident, but most answers were wrong. That’s worth knowing before an exam.' : ''}</p>
+      <a class="btn btn-primary js-install" href="${href}" target="_blank" rel="noopener" style="justify-self:start">Do this for every chapter</a></div>`;
+  }
+  function reset() {
+    i = 0; right = 0; conf = null; start = Date.now();
+    clearInterval(tick);
+    tick = setInterval(() => { const s = Math.round((Date.now() - start) / 1000); timerEl.textContent = `${s}s / 90s`; }, 1000);
+    timerEl.textContent = '0s / 90s';
+    renderQ();
+  }
+  document.getElementById('demo-reset').addEventListener('click', reset);
+  reset();
+})();
+</script>
+
+</body>
+</html>

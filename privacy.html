@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LearnLedger Privacy Policy</title>
+<link rel="icon" href="assets/favicon.png">
+<style>:root {
+  color-scheme: light;
+  --page: #f6f6f3; --surface: #fcfcfb; --surface-2: #f0efec; --border: rgba(11,11,11,.10); --border-strong: rgba(11,11,11,.18);
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #7a7872; --grid: #e1e0d9; --axis: #c3c2b7;
+  --accent: #2a78d6; --accent-ink: #1c5cab; --accent-wash: #e6f0fc; --on-accent: #fff;
+  --good: #0ca30c; --good-ink: #006300; --warn: #fab219; --warn-ink: #8a5a00; --bad: #d03b3b; --bad-ink: #b02a2a;
+  --good-wash: #e6f5e6; --warn-wash: #fdf3dc; --bad-wash: #fbe9e9;
+  --seq-0: #f0efec; --seq-1: #cde2fb; --seq-2: #9ec5f4; --seq-3: #5598e7; --seq-4: #256abf; --seq-5: #104281;
+  --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 16px rgba(0,0,0,.04);
+  --radius: 12px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --surface-2: #242422; --border: rgba(255,255,255,.10); --border-strong: rgba(255,255,255,.2);
+    --ink: #fff; --ink-2: #c3c2b7; --muted: #8f8d86; --grid: #2c2c2a; --axis: #383835;
+    --accent: #3987e5; --accent-ink: #86b6ef; --accent-wash: #16263b; --on-accent: #fff;
+    --good-ink: #3fc03f; --warn-ink: #fab219; --bad-ink: #ef7272;
+    --good-wash: #13261a; --warn-wash: #2b2413; --bad-wash: #2e1717;
+    --seq-0: #242422; --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #b7d3f6;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --surface-2: #242422; --border: rgba(255,255,255,.10); --border-strong: rgba(255,255,255,.2);
+  --ink: #fff; --ink-2: #c3c2b7; --muted: #8f8d86; --grid: #2c2c2a; --axis: #383835;
+  --accent: #3987e5; --accent-ink: #86b6ef; --accent-wash: #16263b; --on-accent: #fff;
+  --good-ink: #3fc03f; --warn-ink: #fab219; --bad-ink: #ef7272;
+  --good-wash: #13261a; --warn-wash: #2b2413; --bad-wash: #2e1717;
+  --seq-0: #242422; --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #6da7ec; --seq-5: #b7d3f6;
+  --shadow: none;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--ink); font-size: 14px; line-height: 1.45; }
+a { color: var(--accent-ink); text-decoration: none; } a:hover { text-decoration: underline; }
+h1, h2, h3 { margin: 0; line-height: 1.25; }
+h1 { font-size: 22px; font-weight: 650; } h2 { font-size: 15px; font-weight: 600; } h3 { font-size: 14px; font-weight: 600; }
+.muted { color: var(--muted); } .ink2 { color: var(--ink-2); } .small { font-size: 12px; }
+.num { font-variant-numeric: tabular-nums; }
+.row { display: flex; align-items: center; gap: 8px; } .wrap { flex-wrap: wrap; } .grow { flex: 1; min-width: 0; }
+.stack > * + * { margin-top: 12px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); min-width: 0; }
+.card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+button, .btn { font: inherit; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--ink);
+  padding: 6px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+button:hover { background: var(--surface-2); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 550; }
+button.primary:hover { filter: brightness(1.07); }
+button.ghost { border-color: transparent; background: transparent; color: var(--ink-2); }
+button.ghost:hover { background: var(--surface-2); }
+button.danger { color: var(--bad-ink); }
+button:disabled { opacity: .5; cursor: default; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input, select, textarea { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--border-strong); border-radius: 8px; padding: 6px 10px; min-width: 0; }
+textarea { width: 100%; resize: vertical; min-height: 64px; }
+label.field, div.field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--ink-2); font-weight: 500; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border); background: var(--surface-2); color: var(--ink-2); white-space: nowrap; }
+button.chip { cursor: pointer; }
+button.chip.on { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-ink); }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; display: inline-block; }
+.band-strong { background: var(--good-wash); color: var(--good-ink); border-color: transparent; }
+.band-moderate { background: var(--warn-wash); color: var(--warn-ink); border-color: transparent; }
+.band-weak { background: var(--bad-wash); color: var(--bad-ink); border-color: transparent; }
+.band-strong .dot { background: var(--good); } .band-moderate .dot { background: var(--warn); } .band-weak .dot { background: var(--bad); }
+.progress { height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.progress > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+.toggle { position: relative; width: 36px; height: 20px; flex: none; }
+.toggle input { opacity: 0; width: 100%; height: 100%; margin: 0; position: absolute; cursor: pointer; z-index: 1; }
+.toggle span { position: absolute; inset: 0; border-radius: 99px; background: var(--axis); transition: .15s; }
+.toggle span::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: .15s; }
+.toggle input:checked + span { background: var(--accent); }
+.toggle input:checked + span::after { transform: translateX(16px); }
+.empty { text-align: center; padding: 24px 12px; color: var(--muted); }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--page); padding: 8px 16px; border-radius: 8px; z-index: 100; font-size: 13px; }
+</style>
+<style>main{max-width:720px;margin:0 auto;padding:40px 20px 64px} h1{margin-bottom:4px} h2{margin:28px 0 8px;font-size:17px} p,li{color:var(--ink-2);line-height:1.6} table{border-collapse:collapse;width:100%;font-size:14px} td,th{border-bottom:1px solid var(--border);padding:8px;text-align:left;vertical-align:top}</style>
+</head>
+<body>
+<main><p><a href="index.html">← LearnLedger home</a></p>
+<h1>Privacy Policy</h1>
+<p class="small muted">LearnLedger browser extension · Effective 15 September 2026</p>
+
+<p><b>The short version:</b> LearnLedger keeps your learning record on your own device. We don't run servers that receive your data. We don't sell, share or look at it, and we never use it for advertising.</p>
+
+<h2>What LearnLedger handles and why</h2>
+<table>
+<tr><th>Data</th><th>Why</th><th>Where it goes</th></tr>
+<tr><td>URL, page title, meta description and first heading of pages on supported learning sites (or any site, if you turn on smart detection)</td><td>To tell whether a page is study material and suggest its subject and topic</td><td>Stays in your browser</td></tr>
+<tr><td>Active study time (whether the tab is visible, whether a video is playing, whether you've recently scrolled, clicked or typed)</td><td>To count real study time rather than time a tab was open. Individual clicks, keystrokes and mouse positions are <b>never recorded</b>, only a "recently active" yes/no.</td><td>Stays in your browser</td></tr>
+<tr><td>Topics you confirm, notes and flashcards you write, recall-check answers and scores, settings</td><td>To build your ledger, score retention and schedule revision</td><td>Stays in your browser</td></tr>
+</table>
+<p>For pages that don't look like study material, LearnLedger keeps nothing once the tab is closed. Sites like email, social media and streaming services are ignored completely.</p>
+
+<h2>Where your data is stored</h2>
+<p>Everything is saved with Chrome's extension storage (<code>chrome.storage</code>) on your device. It isn't synced to any LearnLedger server, because there isn't one. If you export a backup (JSON or CSV), that file goes wherever you save it.</p>
+
+<h2>What we don't do</h2>
+<ul>
+<li>We don't collect, transmit, sell or share your personal or browsing data.</li>
+<li>We don't read the full content of the pages you visit.</li>
+<li>We don't use analytics, advertising or tracking scripts.</li>
+<li>We don't ask for your name, email, school or age.</li>
+</ul>
+
+<h2>Permissions</h2>
+<ul>
+<li><b>Read site data on YouTube and learning sites</b>: to measure study time and read page titles there.</li>
+<li><b>All sites (optional, off by default)</b>: only if you turn on smart detection or choose "Track this site".</li>
+<li><b>Storage, alarms, notifications</b>: to save your ledger locally and remind you when recall checks are due.</li>
+<li><b>activeTab, scripting</b>: so the toolbar button can start tracking the page you're on when you ask it to.</li>
+</ul>
+
+<h2>Your control</h2>
+<p>You can pause tracking, ignore any site, export your data, or delete all of it from <b>Settings</b> at any time. Uninstalling the extension removes all its stored data from Chrome.</p>
+
+<h2>Children and students</h2>
+<p>LearnLedger is designed for students, including teenagers. Because data never leaves the device and we collect no personal data, we don't receive any information about children. If a future version adds optional accounts or sync, we will update this policy first and ask for any consent required by law (including parental consent where required) before collecting anything.</p>
+
+<h2>Changes</h2>
+<p>If this policy changes, we'll update the effective date above and describe the change in the extension's release notes.</p>
+
+<h2>Contact</h2>
+<p>Questions? Email <span id="contact">the developer through the "Contact" link on the Chrome Web Store listing</span>.</p>
+</main>
+</body>
+</html>
