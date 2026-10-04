@@ -1,0 +1,23 @@
+name: Check site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: index.html is built from landing.src.html
+        run: |
+          python3 build.py "$RUNNER_TEMP/preview.html"
+          git diff --exit-code index.html || { echo "::error::index.html is stale. Run 'python3 build.py' and commit it."; exit 1; }
+      - name: Local links resolve
+        run: python3 scripts/check_links.py
+      - name: CNAME still points at the custom domain
+        run: grep -qx 'learnledger.site' CNAME

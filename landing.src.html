@@ -1,21 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>LearnLedger — CBSE Class 10 Social Science revision tracker</title>
-<meta name="description" content="Free Chrome extension for CBSE Class 10 Social Science: tracks the chapters you study on YouTube and NCERT sites, checks what you remember with 90-second recall tests, and plans your revision.">
-<meta property="og:title" content="LearnLedger — Class 10 SST revision tracker">
-<meta property="og:description" content="All 22 chapters of CBSE Class 10 Social Science. Track what you study, find out what you remember, revise what you forget. Free, no login.">
-<meta property="og:image" content="https://learnledger.site/assets/og-image.png">
-<meta property="og:url" content="https://learnledger.site/">
-<link rel="canonical" href="https://learnledger.site/">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="assets/favicon.png">
-</head>
-<body>
-
+<title>LearnLedger</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
@@ -194,7 +177,7 @@ footer a { color: var(--ink-2); }
 
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="#top"><img src="assets/icon.png" alt="" width="32" height="32">LearnLedger</a>
+    <a class="logo" href="#top"><img src="{{asset:icon.png}}" alt="" width="32" height="32">LearnLedger</a>
     <nav class="nav-links" aria-label="Main">
       <a href="#how">How it works</a>
       <a href="#chapters">Chapters</a>
@@ -263,19 +246,19 @@ footer a { color: var(--ink-2); }
           <span class="num">1</span>
           <h3>Watch or read</h3>
           <p>Watch a one-shot on YouTube, or read NCERT notes on LearnCBSE or Shaalaa. Only active time counts: a paused video or an idle tab doesn’t.</p>
-          <div class="shot"><img src="assets/shot-1-dashboard.jpg" alt="LearnLedger dashboard showing study time, streak and revision list" width="1280" height="800"></div>
+          <div class="shot"><img src="{{asset:shot-1-dashboard.jpg}}" alt="LearnLedger dashboard showing study time, streak and revision list" width="1280" height="800"></div>
         </div>
         <div class="step">
           <span class="num">2</span>
           <h3>Confirm the chapter</h3>
           <p>It reads the lesson title and suggests the chapter, for example Civics → Ch 2 Federalism → Division of Powers. Hindi titles work too. One click to confirm.</p>
-          <div class="shot"><img src="assets/shot-2-confirm-topics.jpg" alt="Topic confirmation screen with suggested subject and chapter" width="1280" height="800"></div>
+          <div class="shot"><img src="{{asset:shot-2-confirm-topics.jpg}}" alt="Topic confirmation screen with suggested subject and chapter" width="1280" height="800"></div>
         </div>
         <div class="step">
           <span class="num">3</span>
           <h3>Recall, then revise</h3>
           <p>An hour later, and again a day later, answer 3–4 questions written for that NCERT chapter. Weak chapters move to the top of your revision list.</p>
-          <div class="shot"><img src="assets/shot-3-recall-check.jpg" alt="A 90-second recall check question" width="1280" height="800"></div>
+          <div class="shot"><img src="{{asset:shot-3-recall-check.jpg}}" alt="A 90-second recall check question" width="1280" height="800"></div>
         </div>
       </div>
     </div>
@@ -317,9 +300,9 @@ footer a { color: var(--ink-2); }
         <h2>Know which chapter to revise today.</h2>
       </div>
       <div class="gallery">
-        <figure><div class="shot"><img src="assets/shot-4-revision-queue.jpg" alt="Revision queue with weak topics first" width="1280" height="800"></div><figcaption>Revision queue: weak chapters first, then what’s due, then mastered.</figcaption></figure>
+        <figure><div class="shot"><img src="{{asset:shot-4-revision-queue.jpg}}" alt="Revision queue with weak topics first" width="1280" height="800"></div><figcaption>Revision queue: weak chapters first, then what’s due, then mastered.</figcaption></figure>
         <div class="stack">
-          <figure><div class="shot"><img src="assets/shot-5-coverage.jpg" alt="Syllabus coverage grid showing all 22 chapters" width="1280" height="800"></div><figcaption>Syllabus coverage: which of the 22 chapters you have studied, and how well you hold them.</figcaption></figure>
+          <figure><div class="shot"><img src="{{asset:shot-5-coverage.jpg}}" alt="Syllabus coverage grid showing all 22 chapters" width="1280" height="800"></div><figcaption>Syllabus coverage: which of the 22 chapters you have studied, and how well you hold them.</figcaption></figure>
         </div>
       </div>
     </div>
@@ -327,7 +310,7 @@ footer a { color: var(--ink-2); }
 
   <section class="block">
     <div class="wrap share">
-      <img src="assets/share-card.jpg" alt="Weekly progress card showing 4 hours 17 minutes studied, 4-day streak and average recall score 95" width="540" height="675">
+      <img src="{{asset:share-card.jpg}}" alt="Weekly progress card showing 4 hours 17 minutes studied, 4-day streak and average recall score 95" width="540" height="675">
       <div class="sec-head" style="margin:0">
         <span class="eyebrow">Study streaks</span>
         <h2>Post your week, not your screen time.</h2>
@@ -456,6 +439,3 @@ footer a { color: var(--ink-2); }
   reset();
 })();
 </script>
-
-</body>
-</html>
