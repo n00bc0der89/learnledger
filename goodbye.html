@@ -25,7 +25,7 @@ p{margin:0;color:var(--ink2)}
   <p>Changed your mind? <a href="index.html">Reinstall LearnLedger</a>.</p>
 </main>
 <script>
-  const EMAIL = ''; // set your support address, e.g. hello@yourdomain
+  const EMAIL = 'learnledgersupport@gmail.com'; // set your support address, e.g. hello@yourdomain
   const reasons = ["It didn't track my study correctly", 'Topic suggestions were wrong', 'Recall checks took too long', 'I was worried about privacy', 'I only study on my phone', 'Something else'];
   document.getElementById('reasons').innerHTML = reasons.map((r) =>
     `<a href="mailto:${EMAIL}?subject=${encodeURIComponent('LearnLedger uninstall: ' + r)}&body=${encodeURIComponent('Anything else we should know?\n\n')}">${r}</a>`).join('');
