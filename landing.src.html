@@ -385,8 +385,8 @@ footer a { color: var(--ink-2); }
 
 <script>
 (() => {
-  // Set this once the listing is live, e.g. https://chromewebstore.google.com/detail/learnledger/<id>
-  const STORE_URL = '';
+  // Chrome Web Store listing; install buttons fall back to a store search if empty
+  const STORE_URL = 'https://chromewebstore.google.com/detail/learnledger-class-10-soci/oblfffnhmlfljefnieigjnooklkblipg';
   const href = STORE_URL || 'https://chromewebstore.google.com/search/LearnLedger';
   document.querySelectorAll('.js-install').forEach((a) => { a.href = href; a.target = '_blank'; a.rel = 'noopener'; });
 
